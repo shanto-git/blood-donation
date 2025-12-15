@@ -1,78 +1,86 @@
-import { useState, useContext } from "react";
-import { AuthContext } from "../../context/AuthContext";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import React, { use, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { AuthContext } from "../auth/AuthProvider";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
 const Login = () => {
-  const { loginUser } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate();
+  const [error, setError] = useState();
+  const { signIn } = use(AuthContext);
   const location = useLocation();
-  const from = location.state?.from?.pathname || "/";
-
-  const handleSubmit = async (e) => {
+  const navigate = useNavigate();
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const handleLogin = (e) => {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-
-    try {
-      await loginUser(email, password);
-      navigate(from, { replace: true });
-    } catch (err) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
+    const form = e.target;
+    const email = form.email.value;
+    const password = form.password.value;
+    signIn(email, password)
+      .then((result) => {
+        const user = result.user;
+        // console.log(user);
+        navigate(`${location.state?.from?.pathname || "/"}`);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        // const errorMessage = error.message;
+        // alert(errorCode, errorMessage);
+        setError(errorCode);
+      });
   };
-
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 bg-white rounded shadow-md">
-        <h2 className="text-2xl font-bold mb-6 text-center text-red-600">
-          Login
-        </h2>
-
-        {error && (
-          <p className="text-red-600 text-sm mb-4 text-center">{error}</p>
-        )}
-
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-red-600"
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            className="border p-2 rounded focus:outline-none focus:ring-2 focus:ring-red-600"
-          />
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-red-600 text-white py-2 rounded hover:bg-red-700 transition"
-          >
-            {loading ? "Logging in..." : "Login"}
-          </button>
-        </form>
-
-        <p className="text-center text-sm mt-4">
-          Don't have an account?{" "}
-          <Link to="/register" className="text-red-600 hover:underline">
-            Register
-          </Link>
-        </p>
+    <div className="hero bg-base-200 min-h-screen">
+      <div className="hero-content w-96">
+        <div className="card bg-base-100 w-full max-w-2xl shrink-0 shadow-2xl">
+          <form onSubmit={handleLogin} className="card-body">
+            <h1 className="text-2xl text-center font-bold">Login With Email</h1>
+            <fieldset className="fieldset">
+              <label className="label">Email</label>
+              <input
+                name="email"
+                type="email"
+                className="input"
+                placeholder="Email"
+                required
+              />
+              <label className="label">Password</label>
+              <input
+                name="password"
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="input"
+                placeholder="Password"
+                required
+              />
+              <span
+                className="absolute right-7 top-1/2 translate-y-1/2 cursor-pointer"
+                onClick={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? <FaRegEyeSlash /> : <FaRegEye />
+}
+              </span>
+              <div>
+                <Link to="forgotPass" className="link link-hover">
+                  Forgot password?
+                </Link>
+              </div>
+              {error && <p className="text-red-400 text-sm">{error}</p>}
+              <button type="submit" className="btn btn-neutral mt-4">
+                Login
+              </button>
+              <p className="text-center">
+                Don't have an account? Please{" "}
+                <Link
+                  to="/auth/register"
+                  className="text-blue-500 hover:underline"
+                >
+                  SignUp
+                </Link>
+              </p>
+            </fieldset>
+          </form>
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../auth/AuthProvider";
+import { NavLink } from "react-router-dom"; // Import NavLink
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -10,47 +11,45 @@ const Navbar = () => {
     setOpen(false);
   };
 
+  // NavLink active class
+  const navLinkClass = ({ isActive }) =>
+    isActive
+      ? "text-red-600 font-semibold"
+      : "text-gray-700 hover:text-red-600";
+
   return (
     <nav className="bg-white shadow-md">
-      <div className="px-2">
+      <div className="px-4 mx-auto">
         <div className="flex items-center justify-between h-16">
 
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2">
+          <NavLink to="/" className="flex items-center gap-2">
             <img
               src="/logo.png"
               alt="Logo"
               className="w-8 h-8 object-contain"
             />
-            <span className="text-xl font-bold text-red-600">
-              BloodCare
-            </span>
-          </a>
+            <span className="text-xl font-bold text-red-600">BloodCare</span>
+          </NavLink>
 
           {/* Menu */}
-            <a
-              href="/donation-requests"
-              className="text-gray-700 hover:text-blue-600 hover:underline"
-            >
-              Donation Requests
-            </a>
           <div className="flex items-center gap-6">
+            <NavLink to="/donation-requests" className={navLinkClass}>
+              Donation Requests
+            </NavLink>
 
             {!user ? (
-              <a
-                href="/login"
+              <NavLink
+                to="/login"
                 className="btn font-bold flex justify-end hover:btn-secondary hover:text-white"
               >
                 Login
-              </a>
+              </NavLink>
             ) : (
               <>
-                <a
-                  href="/funding"
-                  className="text-gray-700 hover:text-red-600"
-                >
+                <NavLink to="/funding" className={navLinkClass}>
                   Funding
-                </a>
+                </NavLink>
 
                 {/* User Avatar */}
                 <div className="relative">
@@ -59,7 +58,10 @@ const Navbar = () => {
                     className="focus:outline-none"
                   >
                     <img
-                      src={user?.photoURL || "https://i.ibb.co/9N0V0Yt/avatar.png"}
+                      src={
+                        user?.photoURL ||
+                        "https://i.ibb.co/9N0V0Yt/avatar.png"
+                      }
                       alt="User"
                       className="w-9 h-9 rounded-full border-2 border-red-500"
                     />
@@ -67,13 +69,13 @@ const Navbar = () => {
 
                   {open && (
                     <div className="absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg p-2">
-                      <a
-                        href="/dashboard"
+                      <NavLink
+                        to="/dashboard"
                         className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
                         onClick={() => setOpen(false)}
                       >
                         Dashboard
-                      </a>
+                      </NavLink>
 
                       <button
                         onClick={handleLogout}
