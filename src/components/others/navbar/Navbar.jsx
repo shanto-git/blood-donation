@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../auth/AuthProvider";
-import { NavLink } from "react-router-dom"; // Import NavLink
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -10,8 +10,6 @@ const Navbar = () => {
     await logOut();
     setOpen(false);
   };
-
-  // NavLink active class
   const navLinkClass = ({ isActive }) =>
     isActive
       ? "text-red-600 font-semibold"
@@ -21,8 +19,6 @@ const Navbar = () => {
     <nav className="bg-white shadow-md">
       <div className="px-4 mx-auto">
         <div className="flex items-center justify-between h-16">
-
-          {/* Logo */}
           <NavLink to="/" className="flex items-center gap-2">
             <img
               src="/logo.png"
@@ -31,8 +27,6 @@ const Navbar = () => {
             />
             <span className="text-xl font-bold text-red-600">BloodCare</span>
           </NavLink>
-
-          {/* Menu */}
           <div className="flex items-center gap-6">
             <NavLink to="/donation-requests" className={navLinkClass}>
               Donation Requests
@@ -51,7 +45,6 @@ const Navbar = () => {
                   Funding
                 </NavLink>
 
-                {/* User Avatar */}
                 <div className="relative">
                   <button
                     onClick={() => setOpen(!open)}

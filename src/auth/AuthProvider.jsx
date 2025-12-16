@@ -1,68 +1,79 @@
-import { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useState } from "react";
+import {app} from "../firebase/firebase.config";
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
+  getAuth,
+  GoogleAuthProvider,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "../firebase/firebase.config";
+import axios from "axios";
 
-export const AuthContext = createContext(null);
+export const AuthContext = createContext();
+const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [role, setRole]= useState('');
 
-  // Create user
   const createUser = (email, password) => {
     setLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  // Login user
-  const loginUser = (email, password) => {
+  const signIn = (email, password) => {
     setLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // Update profile
-  const updateUserProfile = (name, photo) => {
-    return updateProfile(auth.currentUser, {
-      displayName: name,
-      photoURL: photo,
-    });
+  const signInWithGoogle = () => {
+    return signInWithPopup(auth, googleProvider);
   };
 
-  // Logout
+  const updateUser = (updateData) => {
+    return updateProfile(auth.currentUser, updateData);
+  };
+
   const logOut = () => {
-    setLoading(true);
     return signOut(auth);
   };
 
-  // Track auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
     });
-
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   }, []);
+  useEffect(()=>{
+    if(user) return;
+    axios.get(`http://localhost:5000/users/role/${user}`)
+      .then(res=>{
+        setRole(res.data.role)
+        setLoading(false)
+      })
+  },[user])
 
-  const authInfo = {
+  const authData = {
     user,
-    loading,
+    setUser,
     createUser,
-    loginUser,
-    updateUserProfile,
     logOut,
+    signIn,
+    loading,
+    setLoading,
+    updateUser,
+    signInWithGoogle,
   };
-
   return (
-    <AuthContext.Provider value={authInfo}>
-      {children}
-    </AuthContext.Provider>
+    <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>
   );
 };
 
