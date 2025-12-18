@@ -1,6 +1,8 @@
 import { NavLink, Outlet } from "react-router-dom";
 import { FaUser, FaHome, FaBars } from "react-icons/fa";
 import { useState } from "react";
+import { IoIosCreate } from "react-icons/io";
+import { CiMemoPad } from "react-icons/ci";
 
 const DashboardLayout = () => {
   const [open, setOpen] = useState(false);
@@ -13,28 +15,43 @@ const DashboardLayout = () => {
           open ? "translate-x-0" : "-translate-x-full"
         } lg:translate-x-0 transition-transform duration-300`}
       >
-        <div className="p-5 border-b font-bold text-xl text-center">
+        <div className="p-2 border-b-1 font-bold text-xl text-center">
           Dashboard
         </div>
 
         <nav className="p-4 space-y-2">
 
           
-          <NavLink
-            to="/"
-            className="flex items-center gap-2 p-2 rounded hover:bg-gray-100"
-          >
-            <FaHome /> Home
-          </NavLink>
+          
           <NavLink
             to="/dashboard/profile"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${
-                isActive ? "bg-red-100 text-red-600" : "hover:bg-gray-100"
+                isActive ? "btn btn-secondary" : "hover:bg-red-50"
               }`
             }
           >
             <FaUser /> Profile
+          </NavLink>
+          <NavLink
+            to="/dashboard/create-request"
+            className={({ isActive }) =>
+              `flex items-center gap-2 p-2 rounded ${
+                isActive ? "btn btn-secondary" : "hover:bg-red-50"
+              }`
+            }
+          >
+            <IoIosCreate /> Create Request
+          </NavLink>
+          <NavLink
+            to="/dashboard/my-requests"
+            className={({ isActive }) =>
+              `flex items-center gap-2 p-2 rounded ${
+                isActive ? "btn btn-secondary" : "hover:bg-red-50"
+              }`
+            }
+          >
+            <CiMemoPad /> My Request
           </NavLink>
         </nav>
       </aside>

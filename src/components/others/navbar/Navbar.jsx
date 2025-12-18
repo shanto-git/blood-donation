@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { AuthContext } from "../../../auth/AuthProvider";
 import { NavLink } from "react-router-dom";
+import { FaPlus } from "react-icons/fa";
 
 const Navbar = () => {
   const { user, logOut } = useContext(AuthContext);
@@ -12,20 +13,15 @@ const Navbar = () => {
   };
   const navLinkClass = ({ isActive }) =>
     isActive
-      ? "text-red-600 font-semibold"
-      : "text-gray-700 hover:text-red-600";
+      ? "text-blue-600 font-semibold"
+      : "font-bold hover:border-b";
 
   return (
     <nav className="bg-white shadow-md">
       <div className="px-4 mx-auto">
         <div className="flex items-center justify-between h-16">
           <NavLink to="/" className="flex items-center gap-2">
-            <img
-              src="/logo.png"
-              alt="Logo"
-              className="w-8 h-8 object-contain"
-            />
-            <span className="text-xl font-bold text-red-600">BloodCare</span>
+            <h2 className="text-xl font-bold flex text-red-600">Blood<span className="text-black flex">Plus<FaPlus className="mt-1" size={12} /></span></h2>
           </NavLink>
           <div className="flex items-center gap-6">
             <NavLink to="/donation-requests" className={navLinkClass}>
@@ -64,7 +60,7 @@ const Navbar = () => {
                     <div className="absolute right-0 mt-2 w-44 bg-white rounded-md shadow-lg p-2">
                       <NavLink
                         to="/dashboard"
-                        className="block px-4 py-2 text-gray-700 hover:bg-gray-100"
+                        className="block p-2 text-gray-700 rounded-sm font-semibold hover:bg-gray-100"
                         onClick={() => setOpen(false)}
                       >
                         Dashboard
@@ -72,9 +68,9 @@ const Navbar = () => {
 
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left p-2 text-red-600 hover:bg-gray-100"
+                        className="w-full text-left p-2 rounded-sm font-semibold text-red-600 hover:bg-gray-100"
                       >
-                        Logout
+                        LogOut
                       </button>
                     </div>
                   )}

@@ -8,6 +8,9 @@ import Register from "../pages/Register";
 import PrivateRoute from "../auth/PrivateRoute";
 import DashboardLayout from "../components/layout/DashboardLayout";
 import Profile from "../pages/dashboard/Profile";
+import CreateRequest from "../pages/bloodDonor/CreateRequest";
+import MyRequests from "../pages/bloodDonor/MyRequests";
+import WelcomeMsg from "../pages/bloodDonor/WelcomeMsg";
 
 const Route = createBrowserRouter([
   {
@@ -37,8 +40,20 @@ const Route = createBrowserRouter([
     ),
     children: [
       {
-        path: "profile",
+        path:"/dashboard",
+        element:<WelcomeMsg/>
+,      },
+      {
+        path: "/dashboard/profile",
         element: <Profile />,
+      },
+      {
+        path: "/dashboard/create-request",
+        element: <CreateRequest />,
+      },
+      {
+        path: "/dashboard/my-requests",
+        element: <MyRequests />,
       },
     ],
   },
