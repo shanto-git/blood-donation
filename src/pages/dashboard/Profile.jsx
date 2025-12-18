@@ -11,7 +11,7 @@ const Profile = () => {
   useEffect(() => {
     if (user?.email) {
       axios
-        .get(`http://localhost:5000/users/profile/${user._id}`)
+        .get(`http://localhost:5000/users/role//${user?.email}`)
         .then((res) => setProfile(res.data))
         .catch((err) => console.error(err));
     }
@@ -27,7 +27,7 @@ const Profile = () => {
     try {
       setLoading(true);
       await axios.put(
-        `http://localhost:5000/users/profile/${user._id}`,
+        `http://localhost:5000/users/role//${user?.email}`,
         profile
       );
       setIsEdit(false);
@@ -96,7 +96,7 @@ const Profile = () => {
           <label className="block mb-1 font-medium">Blood Group</label>
           <select
             name="bloodGroup"
-            value={user.bloodGroup || ""}
+            value={user?.blood_group || "note found"}
             onChange={handleChange}
             disabled={!isEdit}
             className="select select-bordered w-full"
@@ -115,7 +115,7 @@ const Profile = () => {
           <label className="block mb-1 font-medium">Role</label>
           <input
             type="text"
-            value={user?.role || ""}
+            value={user?.role || "note found"}
             disabled
             className="input input-bordered w-full bg-gray-100"
           />
@@ -127,7 +127,7 @@ const Profile = () => {
           <input
             type="text"
             name="district"
-            value={user.district || ""}
+            value={user.district || "Not found"}
             onChange={handleChange}
             disabled={!isEdit}
             className="input input-bordered w-full"
@@ -140,7 +140,7 @@ const Profile = () => {
           <input
             type="text"
             name="upazila"
-            value={user?.upazilas || ""}
+            value={user?.upazilas || "not found"}
             onChange={handleChange}
             disabled={!isEdit}
             className="input input-bordered w-full"

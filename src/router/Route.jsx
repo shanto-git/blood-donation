@@ -52,7 +52,7 @@ const Route = createBrowserRouter([
         element: <CreateRequest />,
       },
       {
-        path: "/dashboard/my-requests",
+        path: "/dashboard/my-donation-requests",
         element: <MyRequests />,
       },
     ],

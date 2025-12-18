@@ -44,7 +44,7 @@ const DashboardLayout = () => {
             <IoIosCreate /> Create Request
           </NavLink>
           <NavLink
-            to="/dashboard/my-requests"
+            to="/dashboard/my-donation-requests"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${
                 isActive ? "btn btn-secondary" : "hover:bg-red-50"
