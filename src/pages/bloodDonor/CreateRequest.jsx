@@ -17,22 +17,22 @@ const CreateRequest = () => {
     e.preventDefault();
     setError("");
 
-    if (!bloodGroup || !units || !hospital) {
+    if (!bloodGroup || !units || !hospital || !notes) {
       return setError("Please fill in all required fields");
     }
 
     try {
       setLoading(true);
-      await axios.post("http://localhost:5000/api/donations", {
+      await axios.post("http://localhost:5000/requests", {
         donorEmail: user.email,
         bloodGroup,
         units,
         hospital,
         notes,
-        status: "pending", // default status
+        status: "pending",
       });
 
-      navigate("/dashboard/my-requests");
+      navigate("my-request");
     } catch (err) {
       setError(err.response?.data?.message || err.message);
     } finally {

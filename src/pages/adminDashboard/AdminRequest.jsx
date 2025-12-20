@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../auth/AuthProvider";
 import axios from "axios";
 
-const MyRequests = () => {
+const AdminRequest = () => {
   const { user } = useContext(AuthContext);
   const [requests, setRequests] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
@@ -112,4 +112,4 @@ const MyRequests = () => {
   );
 };
 
-export default MyRequests;
+export default AdminRequest;

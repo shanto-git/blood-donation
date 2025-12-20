@@ -34,7 +34,7 @@ const DashboardLayout = () => {
             <FaUser /> Profile
           </NavLink>
           <NavLink
-            to="/dashboard/create-request"
+            to="/dashboard/requests"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${
                 isActive ? "btn btn-secondary" : "hover:bg-red-50"
@@ -44,7 +44,7 @@ const DashboardLayout = () => {
             <IoIosCreate /> Create Request
           </NavLink>
           <NavLink
-            to="/dashboard/my-donation-requests"
+            to="my-request"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${
                 isActive ? "btn btn-secondary" : "hover:bg-red-50"
@@ -52,6 +52,26 @@ const DashboardLayout = () => {
             }
           >
             <CiMemoPad /> My Request
+          </NavLink>
+          <NavLink
+            to="/dashboard/all-users"
+            className={({ isActive }) =>
+              `flex items-center gap-2 p-2 rounded ${
+                isActive ? "btn btn-secondary" : "hover:bg-red-50"
+              }`
+            }
+          >
+            <CiMemoPad /> All Users
+          </NavLink>
+          <NavLink
+            to="/dashboard/admin-request"
+            className={({ isActive }) =>
+              `flex items-center gap-2 p-2 rounded ${
+                isActive ? "btn btn-secondary" : "hover:bg-red-50"
+              }`
+            }
+          >
+            <CiMemoPad /> Request
           </NavLink>
         </nav>
       </aside>

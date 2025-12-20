@@ -17,6 +17,7 @@ const Register = () => {
   const [filteredUpozilas, setFilteredUpozilas] = useState([]);
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedUpozila, setSelectedUpozila] = useState("");
+  const [role, setRole] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
@@ -65,7 +66,8 @@ const Register = () => {
       !password ||
       !confirmPassword ||
       !selectedDistrict ||
-      !selectedUpozila
+      !selectedUpozila ||
+      !role
     ) {
       return setError("Please fill in all required fields.");
     }
@@ -87,7 +89,7 @@ const Register = () => {
         formData.append("image", photoFile);
 
         const res = await axios.post(
-          `https://api.imgbb.com/1/upload?key=6aa971fc0d78649e808a57aad4ed26aa`,
+          `https://api.imgbb.com/1/upload?key=f038a3cd32d82bede1ed6fa2ce21f6e1`,
           formData
         );
 
@@ -107,6 +109,7 @@ const Register = () => {
         photoURL,
         district: selectedDistrict,
         upazilas: selectedUpozila,
+        role,
       });
 
       navigate("/");
@@ -194,6 +197,14 @@ const Register = () => {
                 {u.name}
               </option>
             ))}
+          </select>
+        </div>
+        <div className="mb-3">
+          <label className="block mb-1">Role</label>
+          <select name="role" defaultValue="Choose Role" onChange={(e) => setRole(e.target.value)} className=" w-full border p-2 rounded">
+            <option disabled={true}>Choose Role</option>
+            <option value="donor">Donor</option>
+            <option value="volunteer">Volunteer</option>
           </select>
         </div>
         <div className="mb-3">

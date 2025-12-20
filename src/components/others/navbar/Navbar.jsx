@@ -49,7 +49,7 @@ const Navbar = () => {
                     <img
                       src={
                         user?.photoURL ||
-                        "https://i.ibb.co/9N0V0Yt/avatar.png"
+                        ""
                       }
                       alt="User"
                       className="w-9 h-9 rounded-full border-2 border-red-500"
