@@ -30,7 +30,7 @@ const AllBloodDonation = () => {
   );
 
 
-  const handleDelete = (id) => {
+  const handleDelete = (email) => {
     Swal.fire({
       title: "Delete Request?",
       text: "This action cannot be undone!",
@@ -40,9 +40,9 @@ const AllBloodDonation = () => {
       confirmButtonText: "Yes, delete it!"
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await axiosSecure.delete(`/donation-request/${id}`);
+        const res = await axiosSecure.delete(`/all-donation-request/${email}`);
         if (res.data.deletedCount > 0) {
-          setRequests(requests.filter(r => r._id !== id));
+          setRequests(requests.filter(r => r.requesterEmail !== email));
           Swal.fire("Deleted!", "Request removed.", "success");
         }
       }
@@ -52,8 +52,6 @@ const AllBloodDonation = () => {
   return (
     <div className=" p-2">
       <h2 className="text-2xl text-center font-bold mb-6">All Blood Donation Requests</h2>
-
-      {/* Filter Dropdown */}
       <div className="mb-4 flex justify-end">
         <select
           value={statusFilter}
@@ -67,8 +65,6 @@ const AllBloodDonation = () => {
           <option value="canceled">Canceled</option>
         </select>
       </div>
-
-      {/* Table Content */}
       <div>
         <table className="table w-full">
           <thead>
