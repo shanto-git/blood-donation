@@ -1,10 +1,12 @@
 import { NavLink, Outlet } from "react-router-dom";
-import { FaUser, FaHome, FaBars } from "react-icons/fa";
-import { useState } from "react";
+import { FaUser, FaHome, FaBars, FaUsers } from "react-icons/fa";
+import { useContext, useState } from "react";
 import { IoIosCreate } from "react-icons/io";
 import { CiMemoPad } from "react-icons/ci";
+import { AuthContext } from "../../auth/AuthProvider";
 
 const DashboardLayout = () => {
+  const {role}= useContext(AuthContext)
   const [open, setOpen] = useState(false);
 
   return (
@@ -24,6 +26,16 @@ const DashboardLayout = () => {
           
           
           <NavLink
+            to="/"
+            className={({ isActive }) =>
+              `flex items-center gap-2 p-2 rounded ${
+                isActive ? "btn btn-secondary" : "hover:bg-red-50"
+              }`
+            }
+          >
+            <FaHome /> Home
+          </NavLink>
+          <NavLink
             to="/dashboard/profile"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${
@@ -33,7 +45,8 @@ const DashboardLayout = () => {
           >
             <FaUser /> Profile
           </NavLink>
-          <NavLink
+          {
+            role == "donor" && (<NavLink
             to="/dashboard/requests"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${
@@ -42,8 +55,10 @@ const DashboardLayout = () => {
             }
           >
             <IoIosCreate /> Create Request
-          </NavLink>
-          <NavLink
+          </NavLink>)
+          }
+          {
+            role == "donor" && (<NavLink
             to="my-request"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${
@@ -52,8 +67,10 @@ const DashboardLayout = () => {
             }
           >
             <CiMemoPad /> My Request
-          </NavLink>
-          <NavLink
+          </NavLink>)
+          }
+          {
+            role == "admin" && (<NavLink
             to="/dashboard/all-users"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${
@@ -61,17 +78,18 @@ const DashboardLayout = () => {
               }`
             }
           >
-            <CiMemoPad /> All Users
-          </NavLink>
+            <FaUsers /> All Users
+          </NavLink>)
+          }
           <NavLink
-            to="/dashboard/admin-request"
+            to="/dashboard/all-donation"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${
                 isActive ? "btn btn-secondary" : "hover:bg-red-50"
               }`
             }
           >
-            <CiMemoPad /> Request
+            <CiMemoPad /> All Blood Donation
           </NavLink>
         </nav>
       </aside>

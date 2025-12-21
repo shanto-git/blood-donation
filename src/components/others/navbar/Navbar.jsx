@@ -37,7 +37,7 @@ const Navbar = () => {
               </NavLink>
             ) : (
               <>
-                <NavLink to="/funding" className={navLinkClass}>
+                <NavLink to="/donation-funds" className={navLinkClass}>
                   Funding
                 </NavLink>
 

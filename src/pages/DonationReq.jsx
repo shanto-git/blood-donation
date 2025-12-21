@@ -1,151 +1,68 @@
-import { useContext, useEffect, useState } from "react";
-import { Link } from "react-router";
-import { AuthContext } from "../auth/AuthProvider";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { MapPin, Calendar, Clock, Droplet } from 'lucide-react';
 
-const DonationRequests = () => {
-  const [districts, setDistricts] = useState([]);
-  const [upazilas, setUpazilas] = useState([]);
-  const [filteredUpazilas, setFilteredUpazilas] = useState([]);
+const BloodDonationRequests = () => {
+    const [requests, setRequests] = useState([]);
 
-  const [selectedDistrict, setSelectedDistrict] = useState("");
-  const [selectedUpazila, setSelectedUpazila] = useState("");
-  const [bloodGroup, setBloodGroup] = useState("");
-  const {user}= useContext(AuthContext)
+    useEffect(() => {
+        axios.get('http://localhost:5000/pending-requests')
+            .then(res => setRequests(res.data))
+            .catch(err => console.error(err));
+    }, []);
 
-  // Load districts
-  useEffect(() => {
-    fetch("/district.json")
-      .then(res => res.json())
-      .then(data => setDistricts(data));
-  }, []);
+    return (
+        <div className="container mx-auto p-6">
+            <h2 className="text-3xl font-bold text-center mb-8 text-red-600">Pending Donation Requests</h2>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {requests.map((request) => (
+                    <div key={request._id} className="card bg-base-100 shadow-xl border-t-4 border-red-500">
+                        <div className="card-body">
+                            <h3 className="card-title text-xl font-bold border-b pb-2">
+                                {request.recipientName}
+                            </h3>
+                            
+                            <div className="space-y-3 mt-4">
+                                <div className="flex items-center gap-2">
+                                    <Droplet className="text-red-500" size={18} />
+                                    <span className="font-semibold text-lg">Blood Group: </span>
+                                    <span className="badge badge-error text-white">{request.bloodGroup}</span>
+                                </div>
+                                
+                                <div className="flex items-center gap-2">
+                                    <MapPin className="text-gray-500" size={18} />
+                                    <span>{request.hospitalName}, {request.fullAddress}</span>
+                                </div>
 
-  // Load upazilas
-  useEffect(() => {
-    fetch("/upozilas.json")
-      .then(res => res.json())
-      .then(data => setUpazilas(data));
-  }, []);
+                                <div className="flex items-center gap-2">
+                                    <Calendar className="text-gray-500" size={18} />
+                                    <span>{request.donationDate}</span>
+                                </div>
 
-  // Filter upazilas based on district
-  useEffect(() => {
-    if (selectedDistrict) {
-      const filtered = upazilas.filter(
-        upz => upz.district_id === selectedDistrict
-      );
-      setFilteredUpazilas(filtered);
-    } else {
-      setFilteredUpazilas([]);
-    }
-    setSelectedUpazila("");
-  }, [selectedDistrict, upazilas]);
+                                <div className="flex items-center gap-2">
+                                    <Clock className="text-gray-500" size={18} />
+                                    <span>{request.donationTime}</span>
+                                </div>
+                            </div>
 
-  const handleSearch = e => {
-    e.preventDefault();
-
-    const searchData = {
-      bloodGroup,
-      district: selectedDistrict,
-      upazila: selectedUpazila
-    };
-
-    console.log("Search Data:", searchData);
-    // 🔥 future: API call here
-  };
-
-  
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const [formData, setFormData] = useState({
-    recipientName: {},
-    location: "",
-    bloodGroup: "A+",
-    date: "",
-    time: "",
-  });
-
-  const handleView = (e) => {
-    e.preventDefault();
-    navigate(`/request-details`);
-  };
-
-  return (
-     <div className="max-w-md mx-auto p-6 mt-10 bg-white shadow rounded">
-      <h2 className="text-xl text-center font-bold mb-4">Donation Request</h2>
-
-      <form>
-        <div>
-          <label className="block mb-1 font-medium">Name</label>
-          <input
-            type="text"
-            name="name"
-            value={user?.displayName || ""}
-            onChange={handleChange}
-            disabled
-            className="input input-bordered w-full"
-          />
+                            <div className="card-actions justify-end mt-6">
+                                <Link to={`/donation-details/${request._id}`}>
+                                    <button className="btn btn-outline btn-error btn-sm w-full">
+                                        View Details
+                                    </button>
+                                </Link>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            {requests.length === 0 && (
+                <p className="text-center text-gray-500 mt-10 text-lg">No pending donation requests found.</p>
+            )}
         </div>
-        <div>
-          <label className="block mb-1 font-medium">Email</label>
-          <input
-            type="email"
-            value={user?.email || ""}
-            disabled
-            className="input input-bordered w-full bg-gray-100"
-          />
-        </div>
-
-        <div className="mb-3">
-          <label>Blood Group</label>
-          <select
-            name="bloodGroup"
-            value={formData.bloodGroup}
-            onChange={handleChange}
-            className="select select-bordered w-full"
-          >
-            <option>A+</option>
-            <option>A-</option>
-            <option>B+</option>
-            <option>B-</option>
-            <option>AB+</option>
-            <option>AB-</option>
-            <option>O+</option>
-            <option>O-</option>
-          </select>
-        </div>
-
-        <div className="mb-3">
-          <label>Date</label>
-          <input
-            type="date"
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-            className="input input-bordered w-full"
-          />
-        </div>
-
-        <div className="mb-3">
-          <label>Time</label>
-          <input
-            type="time"
-            name="time"
-            value={formData.time}
-            onChange={handleChange}
-            className="input input-bordered w-full"
-          />
-        </div>
-
-        <button
-          onClick={handleView}
-          className="btn btn-secondary mt-4 w-full"
-        >
-          View
-        </button>
-      </form>
-    </div>
-  );
+    );
 };
 
-export default DonationRequests;
+export default BloodDonationRequests;

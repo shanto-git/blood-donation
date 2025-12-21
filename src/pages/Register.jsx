@@ -200,14 +200,6 @@ const Register = () => {
           </select>
         </div>
         <div className="mb-3">
-          <label className="block mb-1">Role</label>
-          <select name="role" defaultValue="Choose Role" onChange={(e) => setRole(e.target.value)} className=" w-full border p-2 rounded">
-            <option disabled={true}>Choose Role</option>
-            <option value="donor">Donor</option>
-            <option value="volunteer">Volunteer</option>
-          </select>
-        </div>
-        <div className="mb-3">
           <label className="block mb-1 text-gray-700">Password</label>
           <input
             type="password"
