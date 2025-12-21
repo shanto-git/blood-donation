@@ -12,7 +12,6 @@ const AllBloodDonation = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  // 1. Fetch all requests
   useEffect(() => {
     axiosSecure.get("/all-donation-requests")
       .then((res) => setRequests(res.data))

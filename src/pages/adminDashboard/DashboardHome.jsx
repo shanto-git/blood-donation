@@ -12,10 +12,9 @@ const DashboardHome = () => {
   });
 
   useEffect(() => {
-    // Fetch statistics from your backend
     const fetchStats = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/admin-stats");
+        const res = await axios.get("https://y-pink-delta.vercel.app/admin-stats");
         setStats(res.data);
       } catch (err) {
         console.error("Error fetching stats:", err);
@@ -26,7 +25,6 @@ const DashboardHome = () => {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      {/* Welcome Section */}
       <section className="bg-white p-8 rounded-xl shadow-sm mb-8 border-l-8 border-secondary">
         <h1 className="text-3xl font-bold text-gray-800">
           Welcome back, <span className="text-secondary">{user?.displayName || "User"}</span>!

@@ -7,7 +7,7 @@ const Funding = () => {
     const axiosSecure = useAxiosSecure();
 
     useEffect(() => {
-        axiosSecure.get('/all-funds')
+        axiosSecure.get('/all-payments')
             .then(res => setFunds(res.data));
     }, [axiosSecure]);
 
@@ -17,7 +17,7 @@ const Funding = () => {
                 <h2 className="text-3xl font-bold">Organization Funds</h2>
             </div>
             <div className="flex justify-end">
-                <Link to="/dashboard/give-fund">
+                <Link to="/give-fund">
                     <button className="btn btn-secondary">Give Fund</button>
                 </Link>
             </div>

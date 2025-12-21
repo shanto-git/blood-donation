@@ -5,6 +5,7 @@ import { IoIosCreate } from "react-icons/io";
 import { CiMemoPad } from "react-icons/ci";
 import { AuthContext } from "../../auth/AuthProvider";
 import { VscGitPullRequestNewChanges } from "react-icons/vsc";
+import { RiRefundFill } from "react-icons/ri";
 
 const DashboardLayout = () => {
   const {role}= useContext(AuthContext)
@@ -12,7 +13,6 @@ const DashboardLayout = () => {
 
   return (
     <div className="min-h-screen flex bg-gray-100">
-      {/* Sidebar */}
       <aside
         className={`fixed lg:static z-50 bg-white w-64 min-h-screen shadow-md transform ${
           open ? "translate-x-0" : "-translate-x-full"
@@ -66,6 +66,20 @@ const DashboardLayout = () => {
           >
             <VscGitPullRequestNewChanges /> My Request
           </NavLink>
+          {
+            (role=="admin"|| role=="volunteer")&&(
+              <NavLink
+            to="/dashboard/total-fund"
+            className={({ isActive }) =>
+              `flex items-center gap-2 p-2 rounded ${
+                isActive ? "btn btn-secondary" : "hover:bg-red-50"
+              }`
+            }
+          >
+            <RiRefundFill />Total Fund
+          </NavLink>
+            )
+          }
           {
             role == "admin" && (<NavLink
             to="/dashboard/all-users"

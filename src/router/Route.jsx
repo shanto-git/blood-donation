@@ -16,11 +16,17 @@ import AllUsers from "../pages/adminDashboard/AllUsers";
 import Funding from "../pages/Funding";
 import AllBloodDonation from "../pages/adminDashboard/AllBloodDonation";
 import DonationDetails from "../components/others/DonationDetails";
+import Donate from "../pages/Donate/Donate";
+import PSuccess from "../pages/Donate/PSuccess";
+import TotalFund from "../pages/adminDashboard/TotalFund";
+import SearchItem from "../pages/Search";
+import Error from "../pages/error/Error";
 
 const Route = createBrowserRouter([
   {
     path: "/",
     Component: MainLayout,
+    errorElement: <Error/>,
     children: [
       {
         path: "/",
@@ -43,12 +49,24 @@ const Route = createBrowserRouter([
         ),
       },
       {
+        path: "/give-fund",
+        Component: Donate,
+      },
+      {
+        path: "/payment-success",
+        Component: PSuccess,
+      },
+      {
         path: "/login",
         Component: Login,
       },
       {
         path: "/register",
         Component: Register,
+      },
+      {
+        path: "/search",
+        element: <SearchItem/>,
       },
     ],
   },
@@ -59,6 +77,7 @@ const Route = createBrowserRouter([
         <DashboardLayout />
       </PrivateRoute>
     ),
+    errorElement: <Error/>,
     children: [
       {
         path: "/dashboard",
@@ -83,6 +102,10 @@ const Route = createBrowserRouter([
       {
         path: "all-users",
         element: <AllUsers />,
+      },
+      {
+        path: "total-fund",
+        element: <TotalFund/>,
       },
     ],
   },
