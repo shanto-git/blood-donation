@@ -30,7 +30,7 @@ const AllBloodDonation = () => {
   );
 
 
-  const handleDelete = (email) => {
+  const handleDelete = (id) => {
     Swal.fire({
       title: "Delete Request?",
       text: "This action cannot be undone!",
@@ -40,9 +40,9 @@ const AllBloodDonation = () => {
       confirmButtonText: "Yes, delete it!"
     }).then(async (result) => {
       if (result.isConfirmed) {
-        const res = await axiosSecure.delete(`/all-donation-request/${email}`);
+        const res = await axiosSecure.delete(`/all-donation-requests/${id}`);
         if (res.data.deletedCount > 0) {
-          setRequests(requests.filter(r => r.requesterEmail !== email));
+          setRequests(requests.filter(r => r._id !== id));
           Swal.fire("Deleted!", "Request removed.", "success");
         }
       }
@@ -93,9 +93,6 @@ const AllBloodDonation = () => {
                   </span>
                 </td>
                 <td className="flex justify-center gap-2">
-                  <Link to={`/dashboard/update-request/${r._id}`} className="btn btn-xs btn-outline btn-info">
-                    Edit
-                  </Link>
                   <button onClick={() => handleDelete(r._id)} className="btn btn-xs btn-outline btn-error">
                     Delete
                   </button>

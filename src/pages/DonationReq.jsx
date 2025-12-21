@@ -2,12 +2,15 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { MapPin, Calendar, Clock, Droplet } from 'lucide-react';
+import useAxiosSecure from '../hooks/useAxiosSecure';
+import { MdBloodtype, MdOutlineLocalHospital } from 'react-icons/md';
 
-const BloodDonationRequests = () => {
+const DonationReq = () => {
     const [requests, setRequests] = useState([]);
+    const axiosSecure = useAxiosSecure();
 
     useEffect(() => {
-        axios.get('http://localhost:5000/pending-requests')
+        axiosSecure.get('/pending-requests')
             .then(res => setRequests(res.data))
             .catch(err => console.error(err));
     }, []);
@@ -18,25 +21,30 @@ const BloodDonationRequests = () => {
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {requests.map((request) => (
-                    <div key={request._id} className="card bg-base-100 shadow-xl border-t-4 border-red-500">
+                    <div key={request._id} className="card bg-base-100 shadow-xl  border-red-500 hover:shadow-2xl" >
                         <div className="card-body">
                             <h3 className="card-title text-xl font-bold border-b pb-2">
-                                {request.recipientName}
+                                Requester Name: {request.recipientName}
                             </h3>
                             
                             <div className="space-y-3 mt-4">
-                                <div className="flex items-center gap-2">
-                                    <Droplet className="text-red-500" size={18} />
+                                <div className="flex justify-center items-center gap-2">
+                                    <MdBloodtype className="text-red-500" size={18} />
                                     <span className="font-semibold text-lg">Blood Group: </span>
-                                    <span className="badge badge-error text-white">{request.bloodGroup}</span>
+                                    <span className="badge badge-soft badge-error font-bold">{request.bloodGroup}</span>
                                 </div>
                                 
                                 <div className="flex items-center gap-2">
+                                    <MdOutlineLocalHospital className="text-gray-500" size={18} />
+                                    <span>{request.hospital}</span>
+                                </div>
+                                <div className="flex items-center gap-2">
                                     <MapPin className="text-gray-500" size={18} />
-                                    <span>{request.hospitalName}, {request.fullAddress}</span>
+                                    <span>{request.address}, {request.selectedUpozila}, {request.selectedDistrict}</span>
                                 </div>
 
-                                <div className="flex items-center gap-2">
+                                <div className="flex justify-between">
+                                    <div className="flex items-center gap-2">
                                     <Calendar className="text-gray-500" size={18} />
                                     <span>{request.donationDate}</span>
                                 </div>
@@ -44,6 +52,7 @@ const BloodDonationRequests = () => {
                                 <div className="flex items-center gap-2">
                                     <Clock className="text-gray-500" size={18} />
                                     <span>{request.donationTime}</span>
+                                </div>
                                 </div>
                             </div>
 
@@ -65,4 +74,4 @@ const BloodDonationRequests = () => {
     );
 };
 
-export default BloodDonationRequests;
+export default DonationReq;

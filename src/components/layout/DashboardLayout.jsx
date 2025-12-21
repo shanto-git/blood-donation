@@ -81,7 +81,8 @@ const DashboardLayout = () => {
             <FaUsers /> All Users
           </NavLink>)
           }
-          <NavLink
+          {
+            role == "admin" && (<NavLink
             to="/dashboard/all-donation"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${
@@ -90,7 +91,8 @@ const DashboardLayout = () => {
             }
           >
             <CiMemoPad /> All Blood Donation
-          </NavLink>
+          </NavLink>)
+          }
         </nav>
       </aside>
 
