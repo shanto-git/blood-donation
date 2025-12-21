@@ -69,19 +69,19 @@ const AllBloodDonation = () => {
         <table className="table w-full">
           <thead>
             <tr className="bg-gray-100 text-center">
-              <th className="border p-2">Recipient</th>
-              <th className="border p-2">Location</th>
-              <th className="border p-2">Date/Time</th>
-              <th className="border p-2">Blood Group</th>
-              <th className="border p-2">Status</th>
-              <th className="border p-2">Actions</th>
+              <th className=" p-2">Recipient</th>
+              <th className=" p-2">Location</th>
+              <th className=" p-2">Date/Time</th>
+              <th className=" p-2">Blood Group</th>
+              <th className=" p-2">Status</th>
+              <th className="p-2">Actions</th>
             </tr>
           </thead>
           <tbody>
             {paginatedRequests.map((r) => (
               <tr key={r._id} className="text-center hover">
                 <td>{r.recipientName}</td>
-                <td>{r.hospitalName}, {r.district}</td>
+                <td>{r.hospital}, {r.address}, <br /> {r.selectedUpozila}, {r.selectedDistrict}</td>
                 <td>{r.donationDate} at {r.donationTime}</td>
                 <td><span className="badge badge-error text-white font-bold">{r.bloodGroup}</span></td>
                 <td>

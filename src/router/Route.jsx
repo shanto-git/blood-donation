@@ -15,6 +15,7 @@ import DonationRequests from "../pages/DonationReq";
 import AllUsers from "../pages/adminDashboard/AllUsers";
 import Funding from "../pages/Funding";
 import AllBloodDonation from "../pages/adminDashboard/AllBloodDonation";
+import DonationDetails from "../components/others/DonationDetails";
 
 const Route = createBrowserRouter([
   {
@@ -28,6 +29,10 @@ const Route = createBrowserRouter([
       {
         path: "/donation-requests",
         Component: DonationRequests,
+      },
+      {
+        path: "/donation-details/:id",
+        element: <PrivateRoute><DonationDetails/></PrivateRoute>,
       },
       {
         path: "/donation-funds",
