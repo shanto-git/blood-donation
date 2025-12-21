@@ -94,7 +94,7 @@ const CreateRequest = () => {
           confirmButtonColor: "#3085d6",
         }).then((result) => {
           if (result.isConfirmed) {
-            navigate("/");
+            navigate("/dashboard/my-request");
           }
         });
       }

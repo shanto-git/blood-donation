@@ -1,52 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import useAxiosSecure from '../hooks/useAxiosSecure';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Funding = () => {
-    const axiosSecure = useAxiosSecure();
     const [funds, setFunds] = useState([]);
-    const navigate = useNavigate();
+    const axiosSecure = useAxiosSecure();
 
     useEffect(() => {
         axiosSecure.get('/all-funds')
-            .then(res => setFunds(res.data))
-            .catch(err => console.error(err));
+            .then(res => setFunds(res.data));
     }, [axiosSecure]);
 
     return (
-        <div className="p-8">
-            <div className="flex justify-between items-center mb-6">
+        <div className="container mx-auto p-6">
+            <div className="flex justify-center items-center mb-8 ">
                 <h2 className="text-3xl font-bold">Organization Funds</h2>
-                <button 
-                    onClick={() => navigate('/give-fund')} 
-                    className="btn btn-secondary"
-                >
-                    Give Fund
-                </button>
+            </div>
+            <div className="flex justify-end">
+                <Link to="/dashboard/give-fund">
+                    <button className="btn btn-secondary">Give Fund</button>
+                </Link>
             </div>
 
-            <div className="overflow-x-auto bg-white rounded-lg shadow">
+            {
+                funds.length>0?(<div className="overflow-x-auto shadow-lg rounded-lg">
                 <table className="table w-full">
                     <thead>
                         <tr className="bg-gray-100">
                             <th>#</th>
                             <th>Donor Name</th>
-                            <th>Amount</th>
-                            <th>Date</th>
+                            <th>Amount (USD)</th>
+                            <th>Funding Date</th>
                         </tr>
                     </thead>
                     <tbody>
                         {funds.map((fund, index) => (
                             <tr key={fund._id}>
-                                <th>{index + 1}</th>
+                                <td>{index + 1}</td>
                                 <td>{fund.userName}</td>
-                                <td className="font-bold text-green-600">${fund.price}</td>
+                                <td className="font-bold text-green-600">${fund.amount}</td>
                                 <td>{new Date(fund.date).toLocaleDateString()}</td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
-            </div>
+            </div>):(<div className="flex flex-col items-center justify-center py-20 bg-gray-50 rounded-lg ">
+                    <p className="text-2xl font-semibold text-gray-500 italic">
+                        No funding received yet.
+                    </p>
+                </div>)
+            }
         </div>
     );
 };

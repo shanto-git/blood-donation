@@ -133,7 +133,7 @@ const Profile = () => {
           <input
             type="text"
             name="upazila"
-            value={profile?.upazila || "not found"}
+            value={profile?.upazilas || "not found"}
             onChange={handleChange}
             disabled={!isEdit}
             className="input input-bordered w-full"

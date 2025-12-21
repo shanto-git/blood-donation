@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../auth/AuthProvider";
 import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const MyRequests = () => {
   const { user } = useContext(AuthContext);
@@ -8,19 +9,18 @@ const MyRequests = () => {
   const [statusFilter, setStatusFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage] = useState(5);
+  const axiosSecure = useAxiosSecure()
 
   useEffect(()=>{
-    axios.get(`http://localhost:5000/volunteer/requests/${user?.email}`)
+    axiosSecure.get(`/my-requests/${user?.email}`)
     .then(res=>{
       setRequests(res.data)
-    },[user?.email])
+    },[user?.email,axiosSecure])
   })
 
   const filteredRequests = requests.filter((r) =>
     statusFilter ? r.status === statusFilter : true
   );
-
-  // Pagination
   const totalPages = Math.ceil(filteredRequests.length / perPage);
   const paginatedRequests = filteredRequests.slice(
     (currentPage - 1) * perPage,
@@ -31,7 +31,6 @@ const MyRequests = () => {
     <div className="bg-white p-6 rounded shadow">
       <h2 className="text-xl text-center font-bold mb-4">My Donation Requests</h2>
 
-      {/* Filter */}
       <div className="mb-4">
         <select
           value={statusFilter}
@@ -45,15 +44,14 @@ const MyRequests = () => {
         </select>
       </div>
 
-      {/* Table */}
-      <table className="table w-full border">
+      <table className="table">
         <thead>
-          <tr className="bg-gray-100">
-            <th className="border p-2">Blood Group</th>
-            <th className="border p-2">Units</th>
-            <th className="border p-2">Hospital</th>
-            <th className="border p-2">Status</th>
-            <th className="border p-2">Actions</th>
+          <tr className="bg-gray-100 text-center">
+            <th className="p-2">Blood Group</th>
+            <th className="p-2">Units</th>
+            <th className="p-2">Hospital</th>
+            <th className="p-2">Status</th>
+            <th className="p-2">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -62,7 +60,7 @@ const MyRequests = () => {
               <td className="border-b p-2">{r.bloodGroup}</td>
               <td className="border-b p-2">{r.units}</td>
               <td className="border-b p-2">{r.hospital}</td>
-              <td className="border-b p-2">{r.status}</td>
+              <td className="border-b p-2"><p className="badge badge-warning badge-soft font-bold">{r.status}</p></td>
               <td className="border-b p-2 flex justify-center gap-2">
                 <button
                   className="btn btn-sm btn-outline btn-info"
@@ -82,7 +80,6 @@ const MyRequests = () => {
         </tbody>
       </table>
 
-      {/* Pagination */}
       <div className="flex justify-center gap-2 mt-4">
         <button
           onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}

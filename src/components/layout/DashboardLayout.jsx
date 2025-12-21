@@ -4,6 +4,7 @@ import { useContext, useState } from "react";
 import { IoIosCreate } from "react-icons/io";
 import { CiMemoPad } from "react-icons/ci";
 import { AuthContext } from "../../auth/AuthProvider";
+import { VscGitPullRequestNewChanges } from "react-icons/vsc";
 
 const DashboardLayout = () => {
   const {role}= useContext(AuthContext)
@@ -63,7 +64,7 @@ const DashboardLayout = () => {
               }`
             }
           >
-            <CiMemoPad /> My Request
+            <VscGitPullRequestNewChanges /> My Request
           </NavLink>
           {
             role == "admin" && (<NavLink
@@ -78,7 +79,7 @@ const DashboardLayout = () => {
           </NavLink>)
           }
           {
-            role == "admin" && (<NavLink
+            (role == "admin"|| role == "volunteer") && (<NavLink
             to="/dashboard/all-donation"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${

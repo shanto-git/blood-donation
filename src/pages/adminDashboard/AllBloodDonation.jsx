@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../../auth/AuthProvider";
 
 const AllBloodDonation = () => {
+  const {role}= useContext(AuthContext)
   const axiosSecure = useAxiosSecure();
   const [requests, setRequests] = useState([]);
   const [statusFilter, setStatusFilter] = useState("");
@@ -93,9 +95,11 @@ const AllBloodDonation = () => {
                   </span>
                 </td>
                 <td className="flex justify-center gap-2">
-                  <button onClick={() => handleDelete(r._id)} className="btn btn-xs btn-outline btn-error">
+                  {
+                    role == "admin" && (<button onClick={() => handleDelete(r._id)} className="btn btn-xs btn-outline btn-error">
                     Delete
-                  </button>
+                  </button>)
+                  }
                   <Link to={`/donation-details/${r._id}`} className="btn btn-xs btn-neutral">
                     View
                   </Link>
@@ -105,8 +109,6 @@ const AllBloodDonation = () => {
           </tbody>
         </table>
       </div>
-
-      {/* Pagination Controls */}
       {totalPages > 1 && (
         <div className="flex justify-center items-center gap-4 mt-6">
           <button
