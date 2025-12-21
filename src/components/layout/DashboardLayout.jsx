@@ -45,8 +45,7 @@ const DashboardLayout = () => {
           >
             <FaUser /> Profile
           </NavLink>
-          {
-            role == "donor" && (<NavLink
+          <NavLink
             to="/dashboard/requests"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${
@@ -55,10 +54,8 @@ const DashboardLayout = () => {
             }
           >
             <IoIosCreate /> Create Request
-          </NavLink>)
-          }
-          {
-            role == "donor" && (<NavLink
+          </NavLink>
+          <NavLink
             to="my-request"
             className={({ isActive }) =>
               `flex items-center gap-2 p-2 rounded ${
@@ -67,8 +64,7 @@ const DashboardLayout = () => {
             }
           >
             <CiMemoPad /> My Request
-          </NavLink>)
-          }
+          </NavLink>
           {
             role == "admin" && (<NavLink
             to="/dashboard/all-users"

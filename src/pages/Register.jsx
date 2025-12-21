@@ -66,8 +66,7 @@ const Register = () => {
       !password ||
       !confirmPassword ||
       !selectedDistrict ||
-      !selectedUpozila ||
-      !role
+      !selectedUpozila 
     ) {
       return setError("Please fill in all required fields.");
     }
@@ -109,7 +108,6 @@ const Register = () => {
         photoURL,
         district: selectedDistrict,
         upazilas: selectedUpozila,
-        role,
       });
 
       navigate("/");

@@ -1,33 +1,35 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../auth/AuthProvider";
 import axios from "axios";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
 
 const Profile = () => {
   const { user } = useContext(AuthContext);
   const [profile, setProfile] = useState({});
   const [isEdit, setIsEdit] = useState(false);
   const [loading, setLoading] = useState(false);
+  const axiosSecure = useAxiosSecure();
 
   useEffect(() => {
     if (user?.email) {
-      axios
-        .get(`http://localhost:5000/users/role//${user?.email}`)
+      axiosSecure
+        .get(`/users/role/${user?.email}`)
         .then((res) => setProfile(res.data))
         .catch((err) => console.error(err));
     }
-  }, [user]);
-
+  }, [user?.email, axiosSecure]);
 
   const handleChange = (e) => {
-    setProfile({ ...user, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setProfile((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Save profile
-  const handleSave = async () => { 
+
+  const handleSave = async () => {
     try {
       setLoading(true);
-      await axios.put(
-        `http://localhost:5000/users/role//${user?.email}`,
+      await axiosSecure.put(
+        `/users/role/${user?.email}`,
         profile
       );
       setIsEdit(false);
@@ -41,7 +43,6 @@ const Profile = () => {
   return (
     <div className="max-w-3xl mx-auto bg-white p-6 rounded shadow">
       <div className="flex justify-between items-center mb-6">
-
         {!isEdit ? (
           <button
             onClick={() => setIsEdit(true)}
@@ -61,7 +62,7 @@ const Profile = () => {
       </div>
       <div className="flex justify-center mb-6">
         <img
-          src={user?.photoURL || "https://i.ibb.co/placeholder.png"}
+          src={profile?.photoURL || "https://i.ibb.co/placeholder.png"}
           alt="avatar"
           className="w-28 h-28 rounded-full border"
         />
@@ -73,30 +74,26 @@ const Profile = () => {
           <input
             type="text"
             name="name"
-            value={user?.displayName || ""}
+            value={profile?.name || ""}
             onChange={handleChange}
             disabled={!isEdit}
             className="input input-bordered w-full"
           />
         </div>
-
-        {/* Email (NOT editable) */}
         <div>
           <label className="block mb-1 font-medium">Email</label>
           <input
             type="email"
-            value={user?.email || ""}
+            value={profile?.email || ""}
             disabled
             className="input input-bordered w-full bg-gray-100"
           />
         </div>
-
-        {/* Blood Group */}
         <div>
           <label className="block mb-1 font-medium">Blood Group</label>
           <select
             name="bloodGroup"
-            value={user?.blood_group || "note found"}
+            value={profile?.bloodGroup || "note found"}
             onChange={handleChange}
             disabled={!isEdit}
             className="select select-bordered w-full"
@@ -109,38 +106,34 @@ const Profile = () => {
             ))}
           </select>
         </div>
-
-        {/* Role */}
         <div>
           <label className="block mb-1 font-medium">Role</label>
           <input
             type="text"
-            value={user?.role || "note found"}
+            value={profile?.role || "note found"}
             disabled
             className="input input-bordered w-full bg-gray-100"
           />
         </div>
 
-        {/* District */}
+
         <div>
           <label className="block mb-1 font-medium">District</label>
           <input
             type="text"
             name="district"
-            value={user.district || "Not found"}
+            value={profile.district || "Not found"}
             onChange={handleChange}
             disabled={!isEdit}
             className="input input-bordered w-full"
           />
         </div>
-
-        {/* Upazila */}
         <div>
           <label className="block mb-1 font-medium">Upazila</label>
           <input
             type="text"
             name="upazila"
-            value={user?.upazilas || "not found"}
+            value={profile?.upazila || "not found"}
             onChange={handleChange}
             disabled={!isEdit}
             className="input input-bordered w-full"
