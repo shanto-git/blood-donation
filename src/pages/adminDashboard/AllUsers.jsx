@@ -12,61 +12,74 @@ const AllUsers = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    if(user){
+    if (user) {
       axiosSecure.get("/users").then((res) => {
-      setUsers(res.data);
-    })
+        setUsers(res.data);
+      });
     }
   }, [axiosSecure, user]);
   console.log(users);
 
   const handleUpdateStatus = async (email, status) => {
-  // Determine text based on action
-  const actionText = status === "blocked" ? "block" : "unblock";
-  const confirmButtonColor = status === "blocked" ? "#d33" : "#3085d6";
+    // Determine text based on action
+    const actionText = status === "blocked" ? "block" : "unblock";
+    const confirmButtonColor = status === "blocked" ? "#d33" : "#3085d6";
 
-  // 1. Show Confirmation Dialog
-  Swal.fire({
-    title: "Are you sure?",
-    text: `You are about to ${actionText} this user.`,
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: confirmButtonColor,
-    cancelButtonColor: "#aaa",
-    confirmButtonText: `Yes, ${actionText} them!`
-  }).then(async (result) => {
-    // 2. If user clicks "Yes"
-    if (result.isConfirmed) {
-      try {
-        const res = await axiosSecure.patch(`/update/user/status?email=${email}&status=${status}`);
-        
-        if (res.data.modifiedCount > 0) {
-          // Update UI state
-          setUsers(users.map(u => u.email === email ? { ...u, status: status } : u));
-          
-          Swal.fire({
-            title: "Success!",
-            text: `User has been ${status === "active" ? "unblocked" : "blocked"}.`,
-            icon: "success",
-            timer: 2000,
-            showConfirmButton: false
-          });
+    // 1. Show Confirmation Dialog
+    Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to ${actionText} this user.`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: confirmButtonColor,
+      cancelButtonColor: "#aaa",
+      confirmButtonText: `Yes, ${actionText} them!`,
+    }).then(async (result) => {
+      // 2. If user clicks "Yes"
+      if (result.isConfirmed) {
+        try {
+          const res = await axiosSecure.patch(
+            `/update/user/status?email=${email}&status=${status}`
+          );
+
+          if (res.data.modifiedCount > 0) {
+            // Update UI state
+            setUsers(
+              users.map((u) =>
+                u.email === email ? { ...u, status: status } : u
+              )
+            );
+
+            Swal.fire({
+              title: "Success!",
+              text: `User has been ${
+                status === "active" ? "unblocked" : "blocked"
+              }.`,
+              icon: "success",
+              timer: 2000,
+              showConfirmButton: false,
+            });
+          }
+        } catch (err) {
+          console.error(err);
+          Swal.fire("Error", "Failed to update status", "error");
         }
-      } catch (err) {
-        console.error(err);
-        Swal.fire("Error", "Failed to update status", "error");
       }
-    }
-  });
-};
+    });
+  };
 
   const handleMakeRole = async (id, newRole) => {
     try {
-      const res = await axiosSecure.patch(`http://localhost:5000/users/role/${id}`, {
-        role: newRole,
-      });
-      if (res.data.modifiedCount > 0){
-        setUsers(users.map(u => u._id === id ? { ...u, role: newRole } : u));
+      const res = await axiosSecure.patch(
+        `https://backend11-ashy.vercel.app/users/role/${id}`,
+        {
+          role: newRole,
+        }
+      );
+      if (res.data.modifiedCount > 0) {
+        setUsers(
+          users.map((u) => (u._id === id ? { ...u, role: newRole } : u))
+        );
         Swal.fire("Success", `User is now an ${newRole}`, "success");
       }
     } catch (err) {
@@ -115,17 +128,25 @@ const AllUsers = () => {
                   <div className="text-sm opacity-50">{u.email}</div>
                 </td>
                 <td>
-                  <span className={`badge badge-sm ${u.role === "admin" ? "badge-warning" : "badge-success"}`}>
+                  <span
+                    className={`badge badge-sm ${
+                      u.role === "admin" ? "badge-warning" : "badge-success"
+                    }`}
+                  >
                     {u.role}
                   </span>
                 </td>
                 <td>
-                  <span className={`badge badge-sm ${u.status === "blocked" ? "badge-error" : "badge-success"}`}>
+                  <span
+                    className={`badge badge-sm ${
+                      u.status === "blocked" ? "badge-error" : "badge-success"
+                    }`}
+                  >
                     {u.status || "active"}
                   </span>
                 </td>
                 <td className="flex flex-wrap gap-2 justify-center">
-                  {(u.status === "active" || !u.status) ? (
+                  {u.status === "active" || !u.status ? (
                     <button
                       onClick={() => handleUpdateStatus(u?.email, "blocked")}
                       className="btn btn-xs btn-error text-white"
@@ -149,8 +170,6 @@ const AllUsers = () => {
                       <UserCheck size={14} className="mr-1" /> Make Volunteer
                     </button>
                   )}
-
-                  
                 </td>
               </tr>
             ))}

@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from "react";
-import {app} from "../firebase/firebase.config";
+import { app } from "../firebase/firebase.config";
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -20,8 +20,8 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [roleLoading, setRoleLoading] = useState(true);
-  const [role, setRole]= useState('');
-  const [userStatus, setUserStatus]= useState('')
+  const [role, setRole] = useState("");
+  const [userStatus, setUserStatus] = useState("");
 
   const createUser = (email, password) => {
     setLoading(true);
@@ -54,15 +54,16 @@ const AuthProvider = ({ children }) => {
       unsubscribe();
     };
   }, []);
-  useEffect(()=>{
-    if(!user) return;
-    axios.get(`https://y-pink-delta.vercel.app/users/role/${user?.email}`)
-      .then(res=>{
-        setRole(res.data.role)
-        setUserStatus(res.data.status)
-        setRoleLoading(false)
-      })
-  },[user])
+  useEffect(() => {
+    if (!user) return;
+    axios
+      .get(`https://backend11-ashy.vercel.app/users/role/${user?.email}`)
+      .then((res) => {
+        setRole(res.data.role);
+        setUserStatus(res.data.status);
+        setRoleLoading(false);
+      });
+  }, [user]);
 
   const authData = {
     user,
@@ -75,7 +76,7 @@ const AuthProvider = ({ children }) => {
     updateUser,
     role,
     roleLoading,
-    userStatus
+    userStatus,
   };
   return (
     <AuthContext.Provider value={authData}>{children}</AuthContext.Provider>

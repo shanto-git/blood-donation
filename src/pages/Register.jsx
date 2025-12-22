@@ -3,7 +3,6 @@ import { AuthContext } from "../auth/AuthProvider";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-
 const Register = () => {
   const { createUser, updateUser, loading, setLoading } =
     useContext(AuthContext);
@@ -41,9 +40,7 @@ const Register = () => {
     const district = districts.find((d) => d.name === selectedDistrict);
     if (!district) return setFilteredUpozilas([]);
 
-    const filtered = upozilas.filter(
-      (u) => u.district_id === district.id
-    );
+    const filtered = upozilas.filter((u) => u.district_id === district.id);
     setFilteredUpozilas(filtered);
   }, [selectedDistrict, districts, upozilas]);
 
@@ -66,7 +63,7 @@ const Register = () => {
       !password ||
       !confirmPassword ||
       !selectedDistrict ||
-      !selectedUpozila 
+      !selectedUpozila
     ) {
       return setError("Please fill in all required fields.");
     }
@@ -102,7 +99,7 @@ const Register = () => {
         photoURL,
       });
 
-      await axios.post(`http://localhost:5000/users`, {
+      await axios.post(`https://backend11-ashy.vercel.app/users`, {
         name,
         email,
         photoURL,
@@ -124,9 +121,7 @@ const Register = () => {
         onSubmit={handleRegister}
         className="bg-white p-8 rounded shadow-md w-full max-w-md"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">
-          Register Now
-        </h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Register Now</h2>
 
         {error && (
           <div className="bg-red-100 text-red-700 p-2 mb-4 rounded">
@@ -208,9 +203,7 @@ const Register = () => {
           />
         </div>
         <div className="mb-3">
-          <label className="block mb-1 text-gray-700">
-            Confirm Password
-          </label>
+          <label className="block mb-1 text-gray-700">Confirm Password</label>
           <input
             type="password"
             className="w-full border p-2 rounded"
